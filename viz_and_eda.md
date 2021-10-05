@@ -241,9 +241,15 @@ weather_df %>%
     ## Warning: Removed 3 rows containing non-finite values (stat_density_ridges).
 
 <img src="viz_and_eda_files/figure-gfm/unnamed-chunk-16-1.png" width="90%" />
-\#\# Embedding plots
+
+## Embedding plots
 
 ``` r
 weather_plot = ggplot(weather_df, aes(x = tmin, y = tmax)) + 
   geom_point(aes(color = name), alpha = .5) 
+weather_plot
 ```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-17-1.png" width="90%" />

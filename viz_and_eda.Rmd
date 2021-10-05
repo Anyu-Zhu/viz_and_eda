@@ -103,6 +103,45 @@ ggplot(weather_df, aes(x = tmax, y = tmin)) +
   geom_hex()
 ```
 
+## Univariate Plots
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmax, fill = name)) +
+  geom_histogram() + 
+  facet_grid(. ~ name)
+```
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmax, fill = name)) +
+  geom_density(alpha = 0.3)
+```
+
+Box plot
+```{r}
+weather_df %>% 
+  ggplot(aes(x = name, y = tmax)) + 
+  geom_boxplot()
+```
+
+Violin plot
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = name, y = tmax)) + 
+  geom_violin()
+```
+
+Without ridges
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmax, y = name)) + 
+  geom_density_ridges(alpha = 0.8, scale = 0.8)
+```
+
+
+
+
 
 
 

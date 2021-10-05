@@ -57,8 +57,8 @@ weather_df %>%
 
     ## Warning: Removed 15 rows containing missing values (geom_point).
 
-![](viz_and_eda_files/figure-gfm/unnamed-chunk-3-1.png)<!-- --> can save
-ggplots
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-3-1.png" width="90%" />
+can save ggplots
 
 ``` r
 ggp_tmax_tmin = weather_df %>% 
@@ -70,7 +70,7 @@ ggp_tmax_tmin
 
     ## Warning: Removed 15 rows containing missing values (geom_point).
 
-![](viz_and_eda_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-4-1.png" width="90%" />
 
 ``` r
 # ggsave(ggp_tmax_tmin)
@@ -93,7 +93,7 @@ weather_df %>%
 
     ## Warning: Removed 15 rows containing missing values (geom_point).
 
-![](viz_and_eda_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-5-1.png" width="90%" />
 
 ``` r
 weather_df %>% 
@@ -108,7 +108,7 @@ weather_df %>%
 
     ## Warning: Removed 15 rows containing missing values (geom_point).
 
-![](viz_and_eda_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-6-1.png" width="90%" />
 
 ``` r
 weather_df %>% 
@@ -124,8 +124,8 @@ weather_df %>%
 
     ## Warning: Removed 15 rows containing missing values (geom_point).
 
-![](viz_and_eda_files/figure-gfm/unnamed-chunk-7-1.png)<!-- --> One more
-scatter plot
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-7-1.png" width="90%" />
+One more scatter plot
 
 ``` r
 weather_df %>% 
@@ -141,7 +141,7 @@ weather_df %>%
 
     ## Warning: Removed 3 rows containing missing values (geom_point).
 
-![](viz_and_eda_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-8-1.png" width="90%" />
 
 ## Use data manipulation as part of this
 
@@ -154,7 +154,7 @@ weather_df %>%
   geom_point()
 ```
 
-![](viz_and_eda_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-9-1.png" width="90%" />
 
 ## Stacking geoms
 
@@ -168,7 +168,7 @@ weather_df %>%
 
     ## Warning: Removed 3 rows containing non-finite values (stat_smooth).
 
-![](viz_and_eda_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-10-1.png" width="90%" />
 
 ``` r
 ggplot(weather_df, aes(x = tmax, y = tmin)) + 
@@ -177,7 +177,7 @@ ggplot(weather_df, aes(x = tmax, y = tmin)) +
 
     ## Warning: Removed 15 rows containing non-finite values (stat_binhex).
 
-![](viz_and_eda_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-11-1.png" width="90%" />
 
 ## Univariate Plots
 
@@ -192,7 +192,7 @@ weather_df %>%
 
     ## Warning: Removed 3 rows containing non-finite values (stat_bin).
 
-![](viz_and_eda_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-12-1.png" width="90%" />
 
 ``` r
 weather_df %>% 
@@ -202,7 +202,7 @@ weather_df %>%
 
     ## Warning: Removed 3 rows containing non-finite values (stat_density).
 
-![](viz_and_eda_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-13-1.png" width="90%" />
 
 Box plot
 
@@ -214,7 +214,7 @@ weather_df %>%
 
     ## Warning: Removed 3 rows containing non-finite values (stat_boxplot).
 
-![](viz_and_eda_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-14-1.png" width="90%" />
 
 Violin plot
 
@@ -226,7 +226,7 @@ weather_df %>%
 
     ## Warning: Removed 3 rows containing non-finite values (stat_ydensity).
 
-![](viz_and_eda_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-15-1.png" width="90%" />
 
 Without ridges
 
@@ -240,4 +240,10 @@ weather_df %>%
 
     ## Warning: Removed 3 rows containing non-finite values (stat_density_ridges).
 
-![](viz_and_eda_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-16-1.png" width="90%" />
+\#\# Embedding plots
+
+``` r
+weather_plot = ggplot(weather_df, aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name), alpha = .5) 
+```

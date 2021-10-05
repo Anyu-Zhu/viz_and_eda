@@ -10,6 +10,12 @@ library(tidyverse)
 library(ggplot2)
 library(ggridges)
 library(hexbin)
+
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = "90%"
+)
 ```
 
 Load a dataset
@@ -137,6 +143,12 @@ Without ridges
 weather_df %>% 
   ggplot(aes(x = tmax, y = name)) + 
   geom_density_ridges(alpha = 0.8, scale = 0.8)
+```
+## Embedding plots
+
+```{r, fig.width=12}
+weather_plot = ggplot(weather_df, aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name), alpha = .5) 
 ```
 
 

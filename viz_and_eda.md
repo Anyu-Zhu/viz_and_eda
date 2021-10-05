@@ -124,4 +124,57 @@ weather_df %>%
 
     ## Warning: Removed 15 rows containing missing values (geom_point).
 
-![](viz_and_eda_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](viz_and_eda_files/figure-gfm/unnamed-chunk-7-1.png)<!-- --> One more
+scatter plot
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = date, y = tmax)) +
+  geom_point(alpha = 0.3) +
+  facet_grid(. ~ name) +
+  geom_smooth(se = FALSE) # se = TRUE give confidence interval
+```
+
+    ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_smooth).
+
+    ## Warning: Removed 3 rows containing missing values (geom_point).
+
+![](viz_and_eda_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+
+## Use data manipulation as part of this
+
+``` r
+weather_df %>% 
+  filter(name == "CentralPark_NY") %>% 
+  mutate(tmax = tmax * (9/5) + 32,
+         tmin = tmin * (9/5) + 32) %>% 
+  ggplot(aes(x = tmin, y = tmax)) +
+  geom_point()
+```
+
+![](viz_and_eda_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+## Stacking geoms
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = date, y = tmax, color = name)) +
+  geom_smooth()
+```
+
+    ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_smooth).
+
+![](viz_and_eda_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
+``` r
+ggplot(weather_df, aes(x = tmax, y = tmin)) + 
+  geom_hex()
+```
+
+    ## Warning: Removed 15 rows containing non-finite values (stat_binhex).
+
+![](viz_and_eda_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->

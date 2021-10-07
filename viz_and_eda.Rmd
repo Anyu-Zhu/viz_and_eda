@@ -10,6 +10,8 @@ library(tidyverse)
 library(ggplot2)
 library(ggridges)
 library(hexbin)
+library(patchwork)
+library(haven)
 
 knitr::opts_chunk$set(
   fig.width = 6,
@@ -254,6 +256,106 @@ weather_df %>%
   ggthemes::theme_excel() +
   theme(legend.position = "bottom")
 ```
+
+## data in geoms
+
+```{r}
+central_park = 
+  weather_df %>% 
+  filter(name == "CentralPark_NY")
+
+waikiki = 
+  weather_df %>% 
+  filter(name == "Waikiki_HA")
+
+weather_df %>% 
+  ggplot(aes(x = date, y = tmax, color = name)) +
+  geom_point()
+
+
+
+waikiki %>% 
+  ggplot(aes(x = date, y = tmax, color = name)) + 
+  geom_point() + 
+  geom_line(data = central_park)
+```
+
+## `patchwork`
+
+```{r}
+ggp_tmax_tmin = 
+  weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = 0.3)
+
+ggp_prcp_dens = 
+  weather_df %>% 
+  filter(prcp > 0) %>% 
+  ggplot(aes(x = prcp, fill = name)) +
+  geom_density(alpha = 0.3)
+
+ggp_tmax_date = 
+  weather_df %>% 
+  ggplot(aes(x = date, y = tmax, color = name)) +
+  geom_point() +
+  geom_smooth(se = FALSE)
+
+(ggp_tmax_tmin + ggp_prcp_dens) / (ggp_tmax_date) # patchwork
+```
+
+## data manipulation
+
+examples on factor
+```{r}
+weather_df %>% 
+  mutate(
+    name = fct_reorder(name, tmax) # order according to values; default: alphabetic
+  ) %>% 
+  ggplot(aes(x = name, y = tmax, fill = name)) +
+    geom_boxplot()
+```
+
+About tmax and tmin
+
+```{r}
+weather_df %>% 
+  pivot_longer(
+    tmax:tmin,
+    names_to = "observations",
+    values_to = "temperature"
+  ) %>% 
+  ggplot(aes(x = temperature, fill = observations)) +
+  geom_density(alpha = 0.3) +
+  facet_grid(. ~ name)
+```
+
+```{r}
+pulse_df = haven::read_sas("data/public_pulse_data.sas7bdat") %>% 
+  janitor::clean_names() %>% 
+  pivot_longer(
+    bdi_score_bl:bdi_score_12m,
+    names_to = "visit",
+    values_to = "bdi",
+    names_prefix = "bdi_score_"
+  ) %>% 
+  mutate(visit = recode(visit, "bl" = "00m"))
+
+pulse_df %>% 
+  ggplot(aes(x = visit, y = bdi)) +
+  geom_boxplot()
+```
+
+Longitudinal analysis
+
+```{r}
+pulse_df %>% 
+  ggplot(aes(x = visit, y = bdi))+
+  geom_point() + 
+  geom_line(aes(group = id), alpha = 0.3) # keep track of each person
+```
+
+
+
 
 
 

@@ -382,3 +382,137 @@ weather_df %>%
     ## Warning: Removed 15 rows containing missing values (geom_point).
 
 <img src="viz_and_eda_files/figure-gfm/unnamed-chunk-22-1.png" width="90%" />
+
+## data in geoms
+
+``` r
+central_park = 
+  weather_df %>% 
+  filter(name == "CentralPark_NY")
+
+waikiki = 
+  weather_df %>% 
+  filter(name == "Waikiki_HA")
+
+weather_df %>% 
+  ggplot(aes(x = date, y = tmax, color = name)) +
+  geom_point()
+```
+
+    ## Warning: Removed 3 rows containing missing values (geom_point).
+
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-23-1.png" width="90%" />
+
+``` r
+waikiki %>% 
+  ggplot(aes(x = date, y = tmax, color = name)) + 
+  geom_point() + 
+  geom_line(data = central_park)
+```
+
+    ## Warning: Removed 3 rows containing missing values (geom_point).
+
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-23-2.png" width="90%" />
+
+## `patchwork`
+
+``` r
+ggp_tmax_tmin = 
+  weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = 0.3)
+
+ggp_prcp_dens = 
+  weather_df %>% 
+  filter(prcp > 0) %>% 
+  ggplot(aes(x = prcp, fill = name)) +
+  geom_density(alpha = 0.3)
+
+ggp_tmax_date = 
+  weather_df %>% 
+  ggplot(aes(x = date, y = tmax, color = name)) +
+  geom_point() +
+  geom_smooth(se = FALSE)
+
+(ggp_tmax_tmin + ggp_prcp_dens) / (ggp_tmax_date) # patchwork
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+    ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_smooth).
+
+    ## Warning: Removed 3 rows containing missing values (geom_point).
+
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-24-1.png" width="90%" />
+
+## data manipulation
+
+examples on factor
+
+``` r
+weather_df %>% 
+  mutate(
+    name = fct_reorder(name, tmax) # order according to values; default: alphabetic
+  ) %>% 
+  ggplot(aes(x = name, y = tmax, fill = name)) +
+    geom_boxplot()
+```
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_boxplot).
+
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-25-1.png" width="90%" />
+
+About tmax and tmin
+
+``` r
+weather_df %>% 
+  pivot_longer(
+    tmax:tmin,
+    names_to = "observations",
+    values_to = "temperature"
+  ) %>% 
+  ggplot(aes(x = temperature, fill = observations)) +
+  geom_density(alpha = 0.3) +
+  facet_grid(. ~ name)
+```
+
+    ## Warning: Removed 18 rows containing non-finite values (stat_density).
+
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-26-1.png" width="90%" />
+
+``` r
+pulse_df = haven::read_sas("data/public_pulse_data.sas7bdat") %>% 
+  janitor::clean_names() %>% 
+  pivot_longer(
+    bdi_score_bl:bdi_score_12m,
+    names_to = "visit",
+    values_to = "bdi",
+    names_prefix = "bdi_score_"
+  ) %>% 
+  mutate(visit = recode(visit, "bl" = "00m"))
+
+pulse_df %>% 
+  ggplot(aes(x = visit, y = bdi)) +
+  geom_boxplot()
+```
+
+    ## Warning: Removed 879 rows containing non-finite values (stat_boxplot).
+
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-27-1.png" width="90%" />
+
+Longitudinal analysis
+
+``` r
+pulse_df %>% 
+  ggplot(aes(x = visit, y = bdi))+
+  geom_point() + 
+  geom_line(aes(group = id), alpha = 0.3) # keep track of each person
+```
+
+    ## Warning: Removed 879 rows containing missing values (geom_point).
+
+    ## Warning: Removed 515 row(s) containing missing values (geom_path).
+
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-28-1.png" width="90%" />

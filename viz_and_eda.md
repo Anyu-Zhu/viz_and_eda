@@ -253,3 +253,132 @@ weather_plot
     ## Warning: Removed 15 rows containing missing values (geom_point).
 
 <img src="viz_and_eda_files/figure-gfm/unnamed-chunk-17-1.png" width="90%" />
+
+## Start with a familiar one
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = 0.3) +
+  labs(
+    title = "Temperature at three stations",
+    x = "Minimum daily temp (C)",
+    y = "Maximum daily temp (C)",
+    caption = "Data from package rnoaa with three stations" 
+  )
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-18-1.png" width="90%" />
+
+## Scales
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = 0.3) +
+  labs(
+    title = "Temperature at three stations",
+    x = "Minimum daily temp (C)",
+    y = "Maximum daily temp (C)",
+    caption = "Data from package rnoaa with three stations" 
+  ) +
+  scale_x_continuous(
+    breaks = c(-15, 0, 15),
+    labels = c("-15 C", "0", "15")
+  ) +
+  scale_y_continuous(
+    trans = "sqrt",
+    position = "right" # label on the right
+  )
+```
+
+    ## Warning in self$trans$transform(x): NaNs produced
+
+    ## Warning: Transformation introduced infinite values in continuous y-axis
+
+    ## Warning: Removed 90 rows containing missing values (geom_point).
+
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-19-1.png" width="90%" />
+
+Color Scales
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = 0.3) +
+  labs(
+    title = "Temperature at three stations",
+    x = "Minimum daily temp (C)",
+    y = "Maximum daily temp (C)",
+    caption = "Data from package rnoaa with three stations" 
+  ) +
+  scale_color_hue(
+    name = "Location", # change legend title
+    h = c(100, 300)) +
+  scale_color_viridis_d()
+```
+
+    ## Scale for 'colour' is already present. Adding another scale for 'colour',
+    ## which will replace the existing scale.
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-20-1.png" width="90%" />
+
+``` r
+# https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html
+```
+
+## Themes
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = 0.3) +
+  labs(
+    title = "Temperature at three stations",
+    x = "Minimum daily temp (C)",
+    y = "Maximum daily temp (C)",
+    caption = "Data from package rnoaa with three stations" 
+  ) +
+  scale_color_hue(
+    name = "Location", # change label name
+    h = c(100, 300)) +
+  scale_color_viridis_d() +
+  theme_minimal() + # background; do this first!! then update other themes
+  theme(legend.position = "bottom")
+```
+
+    ## Scale for 'colour' is already present. Adding another scale for 'colour',
+    ## which will replace the existing scale.
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-21-1.png" width="90%" />
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = 0.3) +
+  labs(
+    title = "Temperature at three stations",
+    x = "Minimum daily temp (C)",
+    y = "Maximum daily temp (C)",
+    caption = "Data from package rnoaa with three stations" 
+  ) +
+  scale_color_hue(
+    name = "Location", # change label name
+    h = c(100, 300)) +
+  scale_color_viridis_d() + 
+  ggthemes::theme_excel() +
+  theme(legend.position = "bottom")
+```
+
+    ## Scale for 'colour' is already present. Adding another scale for 'colour',
+    ## which will replace the existing scale.
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-22-1.png" width="90%" />

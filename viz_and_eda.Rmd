@@ -466,7 +466,7 @@ weather_df %>%
 
 What if "summary" is a linear model?
 
-```{r, eval = TRUE}
+```{r, eval = FALSE}
 weather_df %>% 
   group_by(name) %>% 
   summarize(cor_tmin_tmax = cor(tmin, tmax, use = "complete"))

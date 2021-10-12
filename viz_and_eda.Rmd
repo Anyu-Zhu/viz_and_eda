@@ -441,7 +441,40 @@ weather_df %>%
   geom_point()
 ```
 
+```{r}
+weather_df %>% 
+  group_by(name) %>% 
+  mutate(
+    tmax_rank = min_rank(desc(tmax))
+  ) %>% 
+  filter(tmax_rank < 2)
+```
 
+Lagged variables
+
+```{r}
+weather_df %>% 
+  group_by(name) %>% 
+  mutate(
+    lagged_tmax = lag(tmax, n = 1), # look at values a day before (n = 1)
+    tmax_diff = tmax - lagged_tmax
+  ) %>% 
+  summarize(diff_sd = sd(tmax_diff, na.rm = TRUE))
+```
+
+## Limitations
+
+What if "summary" is a linear model?
+
+```{r, eval = TRUE}
+weather_df %>% 
+  group_by(name) %>% 
+  summarize(cor_tmin_tmax = cor(tmin, tmax, use = "complete"))
+
+weather_df %>% 
+  filter(name == "CentralPark_NY") %>% 
+  lm(tmax ~ tmin, data = .)
+```
 
 
 

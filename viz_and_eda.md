@@ -749,3 +749,143 @@ weather_df %>%
   filter(name == "CentralPark_NY") %>% 
   lm(tmax ~ tmin, data = .)
 ```
+
+## Case Study
+
+``` r
+data("nyc_airbnb")
+```
+
+``` r
+nyc_airbnb = 
+  nyc_airbnb %>% 
+  mutate(stars = review_scores_location / 2) %>% 
+  rename(borough = neighbourhood_group)
+```
+
+Let’s try counting things
+
+``` r
+nyc_airbnb %>% 
+  janitor::tabyl(borough, room_type)
+```
+
+    ##        borough Entire home/apt Private room Shared room
+    ##          Bronx             192          429          28
+    ##       Brooklyn            7427         9000         383
+    ##      Manhattan           10814         7812         586
+    ##         Queens            1388         2241         192
+    ##  Staten Island             116          144           1
+
+``` r
+nyc_airbnb %>% 
+  count(borough, room_type) %>% 
+  pivot_wider(
+    names_from = room_type,
+    values_from = n
+  )
+```
+
+    ## # A tibble: 5 x 4
+    ##   borough       `Entire home/apt` `Private room` `Shared room`
+    ##   <chr>                     <int>          <int>         <int>
+    ## 1 Bronx                       192            429            28
+    ## 2 Brooklyn                   7427           9000           383
+    ## 3 Manhattan                 10814           7812           586
+    ## 4 Queens                     1388           2241           192
+    ## 5 Staten Island               116            144             1
+
+  - Is availability related to price?
+
+<!-- end list -->
+
+``` r
+library(rgeos)
+```
+
+    ## Loading required package: sp
+
+    ## rgeos version: 0.5-8, (SVN revision 679)
+    ##  GEOS runtime version: 3.8.1-CAPI-1.13.3 
+    ##  Please note that rgeos will be retired by the end of 2023,
+    ## plan transition to sf functions using GEOS at your earliest convenience.
+    ##  Linking to sp version: 1.4-5 
+    ##  Polygon checking: TRUE
+
+``` r
+library(maptools)
+```
+
+    ## Checking rgeos availability: TRUE
+
+``` r
+nyc_airbnb %>% 
+  ggplot(aes(x = stars, y = price, color = borough)) + geom_point(alpha = 0.3) +
+  facet_grid(. ~room_type)
+```
+
+    ## Warning: Removed 10037 rows containing missing values (geom_point).
+
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-45-1.png" width="90%" />
+
+``` r
+nyc_airbnb %>% 
+  group_by(neighbourhood) %>% 
+  summarize(mean_price = mean(price, na.rm = TRUE)) %>% 
+  arrange(mean_price)
+```
+
+    ## # A tibble: 217 x 2
+    ##    neighbourhood     mean_price
+    ##    <chr>                  <dbl>
+    ##  1 Little Neck             41.7
+    ##  2 Schuylerville           42.6
+    ##  3 Morris Heights          47.6
+    ##  4 Mount Eden              49.3
+    ##  5 Soundview               50.6
+    ##  6 Claremont Village       51.6
+    ##  7 Hunts Point             52.2
+    ##  8 Baychester              54  
+    ##  9 Rosebank                55  
+    ## 10 Belmont                 55.4
+    ## # … with 207 more rows
+
+``` r
+nyc_airbnb %>% 
+  filter(borough == "Manhattan",
+         price <= 1000) %>% 
+  mutate(neighbourhood = fct_reorder(neighbourhood, price)) %>% 
+  ggplot(aes(x = neighbourhood, y = price)) + geom_boxplot() +
+  coord_flip()# +
+```
+
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-45-2.png" width="90%" />
+
+``` r
+  #facet_grid(. ~ room_type)
+```
+
+Price vs Location
+
+``` r
+nyc_airbnb %>% 
+  filter(price < 500) %>% 
+  sample_n(5000) %>% 
+  ggplot(aes(x = lat, y = long, color = price)) +
+  geom_point(alpha = 0.5)
+```
+
+<img src="viz_and_eda_files/figure-gfm/unnamed-chunk-46-1.png" width="90%" />
+
+## retry leaflet
+
+``` r
+pal <- colorNumeric("viridis", NULL)
+
+nyc_airbnb %>% 
+  filter(price < 500) %>% 
+  sample_n(1000) %>% 
+  leaflet() %>% 
+  addTiles() %>% 
+  addCircleMarkers(~lat, ~long, radius = 0.5, color = ~pal(price))
+```

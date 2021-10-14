@@ -2,7 +2,7 @@
 title: "Visualization and EDA"
 author: "Anyu Zhu"
 date: "10/5/2021"
-output: github_document
+output: html_document
 ---
 
 ```{r, echo=FALSE, message=FALSE}
@@ -545,7 +545,8 @@ nyc_airbnb %>%
 
 
 ## retry leaflet
-```{r, eval=FALSE}
+```{r}
+# output to html for interactivity
 pal <- colorNumeric("viridis", NULL)
 
 nyc_airbnb %>% 

@@ -508,12 +508,6 @@ nyc_airbnb %>%
   )
 ```
 
-* Is availability related to price?
-```{r}
-library(rgeos)
-library(maptools)
-```
-
 
 ```{r}
 nyc_airbnb %>% 
